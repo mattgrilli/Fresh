@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Snippets</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <header>
+      <h1>Snippets</h1>
+      <div class="search-container">
+        <div class="search-wrapper">
+          <input type="text" id="search-input" placeholder="Search...">
+          <div class="search-clear-button">&#x2715;</div>
+          <div class="search-results-overlay">
+            <div class="search-results-container">
+              <ul id="search-results-list"></ul>
+              <div class="search-results-count"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+    </header>
+    
+    <nav class="navbar">
+      <a href="#" class="nav-link" onclick="toggleCreateForm()">+ Add Snippet</a>
+
+      <div class="overlay" id="create-form-overlay">
+        <div class="create-form">
+          <button type="button" class="close-btn" onclick="toggleCreateForm()">X</button>
+          <h2>Create Snippet</h2>
+          <form action="/create" method="POST">
+            <div class="form-group">
+              <input type="text" id="name" name="name" required>
+              <label for="name">name:</label>
+            </div>
+            <div class="form-group">
+              <textarea id="description" name="description" rows="3" required></textarea>
+              <label for="description">Description:</label>
+            </div>
+            <div class="form-group">
+              <select id="language" name="language" required>
+                <option value="">Select a language</option>
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="ruby">Ruby</option>
+                <option value="typescript">TypeScript</option>
+                <option value="command prompt">Command Prompt</option>
+                <option value="powershell">PowerShell</option>
+                <option value="bash">Bash</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="sql">SQL</option>
+                <option value="php">PHP</option>
+                <option value="java">Java</option>
+                <option value="c++">C++</option>
+                <option value="c#">C#</option>
+                <option value="swift">Swift</option>
+                <option value="go">Go</option>
+                <option value="kotlin">Kotlin</option>
+                <option value="rust">Rust</option>
+              </select>
+              
+              <label for="language">language:</label>
+            </div>
+            <div class="form-group">
+              <textarea id="code" name="code" rows="10" required></textarea>
+              <label for="code">code:</label>
+            </div>
+            <button type="submit">create</button>
+          </form>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+    </nav>
+
+    <div class="container">
+      <div class="snippet-count-container">
+        <h2>Snippet Counts</h2>
+        <ul>
+          <% for (let lang in snippetCounts) { %>
+            <li><%= lang %>: <%= snippetCounts[lang] %></li>
+          <% } %>
+        </ul>
+      </div>
+    
+    <div class="snippet-list-container">
+      <!-- Your existing content here -->
+    
+ 
+    
+    <% if (snippets.length === 0) { %>
+      <p>There are no snippets in the database.</p>
+      <button onclick="toggleCreateForm()">Create New Snippet</button>
+    <% } else { %>
+      <ul id="snippets-list">
+        <% snippets.forEach((snippet) => { %>
+          <li>
+            <div class="snippet-header">
+              
+              <h2><%= snippet.name %></h2>
+              
+            </div>
+
+            <label class="snippet-description-label" for="snippet-description">description:</label>
+            <div id="form-group" class="form-group" rows="5">
+              <p class="snippet-description"><%= snippet.description %></p>
+            </div>
+
+            <label for="code-box"></label>
+            <div class="code-wrapper">
+              <div class="code-container">
+                <div class="code-header">
+                  <span class="code-lang"><%= snippet.language %></span>
+                  <button class="copy-btn">Copy code</button>
+                </div>
+                <pre class="code-box"><%= snippet.code %></pre>
+              </div>
+            </div>
+            
+            
+            
+
+            
+            <div class="button-container">
+              <button onclick="toggleEditForm('<%= snippet._id %>')">Edit</button>
+              <form style="display: inline-block" action="/delete/<%= snippet._id %>" method="post">
+                <button type="submit">Delete</button>
+              </form>
+            </div>
+
+            
+            <div class="overlay" id="overlay-<%= snippet._id %>">
+              <div class="edit-form" id="edit-form-<%= snippet._id %>">
+                <button class="close-btn" type="button" onclick="toggleEditForm('<%= snippet._id %>')">X</button>
+                <h2>Edit Snippet</h2>
+                <form action="/edit/<%= snippet._id %>" method="POST">
+                  <div class="form-group">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="text" id="name" name="name" value="<%= snippet.name %>" required>
+                    <label for="name">name</label>
+                  </div>
+                  <div class="form-group">
+                    <textarea id="description" name="description" rows="3" required><%= snippet.description %></textarea>
+                    <label for="description">description</label>
+                  </div>
+                  <div class="form-group">
+                    <select id="language" name="language" required>
+                      <option value="">Select a language</option>
+                      <option value="javascript" <%= snippet.language === 'javascript' ? 'selected' : '' %>>JavaScript</option>
+                      <option value="python" <%= snippet.language === 'python' ? 'selected' : '' %>>Python</option>
+                      <option value="ruby" <%= snippet.language === 'ruby' ? 'selected' : '' %>>Ruby</option>
+                      <option value="typescript" <%= snippet.language === 'typescript' ? 'selected' : '' %>>TypeScript</option>
+                      <option value="command prompt" <%= snippet.language === 'command prompt' ? 'selected' : '' %>>Command Prompt</option>
+                      <option value="powershell" <%= snippet.language === 'powershell' ? 'selected' : '' %>>PowerShell</option>
+                      <option value="bash" <%= snippet.language === 'bash' ? 'selected' : '' %>>Bash</option>
+                      <option value="html" <%= snippet.language === 'html' ? 'selected' : '' %>>HTML</option>
+                      <option value="css" <%= snippet.language === 'css' ? 'selected' : '' %>>CSS</option>
+                      <option value="sql" <%= snippet.language === 'sql' ? 'selected' : '' %>>SQL</option>
+                      <option value="php" <%= snippet.language === 'php' ? 'selected' : '' %>>PHP</option>
+                      <option value="java" <%= snippet.language === 'java' ? 'selected' : '' %>>Java</option>
+                      <option value="c++" <%= snippet.language === 'c++' ? 'selected' : '' %>>C++</option>
+                      <option value="c#" <%= snippet.language === 'c#' ? 'selected' : '' %>>C#</option>
+                      <option value="swift" <%= snippet.language === 'swift' ? 'selected' : '' %>>Swift</option>
+                      <option value="go" <%= snippet.language === 'go' ? 'selected' : '' %>>Go</option>
+                      <option value="kotlin" <%= snippet.language === 'kotlin' ? 'selected' : '' %>>Kotlin</option>
+                      <option value="rust" <%= snippet.language === 'rust' ? 'selected' : '' %>>Rust</option>
+                    </select>
+                    <label for="language">language</label>
+                  </div>
+                  <div class="form-group">
+                    <textarea name="code" class="code-textarea"><%= snippet.code %></textarea>
+                    <label for="code">code</label>
+                  </div>
+                  <button type="submit">save</button>
+                </form>
+                
+              </div>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+ 
+ 
+  </div>
+  </div>
+  
+
+  
+
+  
+
+    <script>
+
+
+
+
+
+
+const copyBtns = document.querySelectorAll('.copy-btn');
+
+function copyToClipboard(text, btn) {
+  navigator.clipboard.writeText(text);
+  btn.classList.add('copied');
+  btn.textContent = 'Copied';
+  setTimeout(() => {
+    btn.classList.remove('copied');
+    btn.textContent = 'Copy code';
+  }, 2000);
+}
+
+
+copyBtns.forEach((btn) => {
+  const code = btn.parentElement.nextElementSibling.textContent;
+  btn.addEventListener('click', () => {
+    copyToClipboard(code, btn);
+  });
+});
+
+
+      function toggleCreateForm() {
+  const createForm = document.getElementById('create-form-overlay');
+  if (createForm.style.display === 'none' || !createForm.style.display) {
+    createForm.style.display = 'block';
+  } else {
+    createForm.style.display = 'none';
+  }
+}
+
+
+      function toggleEditForm(id) {
+        const overlay = document.getElementById(`overlay-${id}`);
+        overlay.classList.toggle('show');
+        const form = document.getElementById(`edit-form-${id}`);
+        form.style.display = 'block';
+      }
+
+
+
+
+    </script>
+    <script src="search.js"></script>
+    
+  </body>
+</html>
+
+
