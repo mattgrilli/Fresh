@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5z6po0gDf0z6l7g9SPIEptLjg8F7f4Cx3b7VATQz"
+    crossorigin="anonymous"
+  />
+</head>
+<form>
+    <style>
+        .validation-message {
+          font-size: 14px;
+          color: red;
+          margin-top: 5px;
+        }
+      </style>
+      
+
+    <h2>Register</h2>
+    <form id="registrationForm" action="/register" method="POST"></form>
+<form action="/register" method="POST">
+  <div class="form-group">
+    <input type="text" id="username" name="username" onblur="checkUsername()" required>
+    <label for="username">Username:</label>
+    <div id="usernameMessage" class="validation-message"></div>
+  </div>
+  <div class="form-group">
+    <input type="email" id="email" name="email" onblur="checkEmail()" required>
+    <label for="email">Email:</label>
+    <div id="emailMessage" class="validation-message"></div>
+  </div>
+  <div class="form-group">
+    <input type="password" id="password" name="password" required>
+    <label for="password">Password:</label>
+    <i class="fas fa-eye toggle-password" toggle-target="password"></i>
+  </div>
+  <div class="form-group">
+    <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+    <label for="passwordConfirm">Confirm Password:</label>
+    <i class="fas fa-eye toggle-password" toggle-target="passwordConfirm"></i>
+  </div>
+  
+  <div class="form-group">
+    <input type="text" id="invitationCode" name="invitationCode" required>
+    <label for="invitationCode">Invitation Code:</label>
+  </div>
+  <button type="submit">Register</button>
+</form>
+</form>
+<ul id="passwordValidationMessage" style="color: red; list-style: none; padding: 0;"></ul>
+
+
+<script>
+function validatePassword() {
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('passwordConfirm');
+  const passwordValidationMessage = document.getElementById('passwordValidationMessage');
+
+  const checkPasswords = () => {
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Check for password requirements
+    const minLength = password.length >= 8;
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const passwordsMatch = password === confirmPassword;
+
+    // Create the validation messages
+    const messages = [
+      { text: 'At least 8 characters', valid: minLength },
+      { text: 'Uppercase letter', valid: hasUpper },
+      { text: 'Lowercase letter', valid: hasLower },
+      { text: 'Number', valid: hasNumber },
+      { text: 'Special character', valid: hasSpecial },
+      { text: 'Passwords match', valid: passwordsMatch },
+    ];
+
+    // Update the validation message list
+    passwordValidationMessage.innerHTML = '';
+    messages.forEach((message) => {
+      const listItem = document.createElement('li');
+      listItem.textContent = message.text;
+      listItem.style.color = message.valid ? 'green' : 'red';
+
+      if (message.valid) {
+        const checkMark = document.createElement('span');
+        checkMark.innerHTML = '&#10003;'; // HTML entity for a checkmark
+        checkMark.style.marginLeft = '5px';
+        listItem.appendChild(checkMark);
+      }
+
+      passwordValidationMessage.appendChild(listItem);
+    });
+    validateForm();
+  };
+
+  passwordInput.addEventListener('input', checkPasswords);
+  confirmPasswordInput.addEventListener('input', checkPasswords);
+}
+
+document.addEventListener('DOMContentLoaded', validatePassword);
+
+
+function checkUsername() {
+  const username = document.getElementById('username').value;
+  const usernameMessage = document.getElementById('usernameMessage');
+
+  if (username.trim() === '') {
+    usernameMessage.textContent = '';
+    return;
+  }
+
+  fetch('/check-username', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.isTaken) {
+        usernameMessage.textContent = 'Username is already taken';
+        usernameMessage.style.color = 'red';
+      } else {
+        usernameMessage.textContent = 'Username is available';
+        usernameMessage.style.color = 'green';
+      }
+      validateForm();
+    });
+}
+
+document.getElementById('registrationForm').addEventListener('submit', function (event) {
+  const usernameInput = document.getElementById('username');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const passwordConfirmInput = document.getElementById('passwordConfirm');
+
+  // Trim whitespace from the input fields
+  usernameInput.value = usernameInput.value.trim();
+  emailInput.value = emailInput.value.trim();
+  passwordInput.value = passwordInput.value.trim();
+  passwordConfirmInput.value = passwordConfirmInput.value.trim();
+});
+
+
+function checkEmail() {
+  const email = document.getElementById('email').value;
+  const emailMessage = document.getElementById('emailMessage');
+  const emailPattern = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+  if (!emailPattern.test(email)) {
+    emailMessage.textContent = 'Invalid email format';
+    emailMessage.style.color = 'red';
+    return;
+  }
+
+  fetch('/check-email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.isTaken) {
+        emailMessage.textContent = 'Email is already registered';
+        emailMessage.style.color = 'red';
+      } else {
+        emailMessage.textContent = '';
+      }
+      validateForm();
+    });
+}
+
+document.getElementById('email').addEventListener('input', checkEmail);
+
+function validateForm() {
+  const usernameMessage = document.getElementById('usernameMessage');
+  const emailMessage = document.getElementById('emailMessage');
+  const passwordValidationMessage = document.getElementById('passwordValidationMessage');
+  const submitButton = document.querySelector('input[type="submit"]');
+
+  const usernameIsValid = !usernameMessage.textContent;
+  const emailIsValid = !emailMessage.textContent;
+  const passwordIsValid = Array.from(passwordValidationMessage.children).every((item) => item.style.color === 'green');
+
+  if (usernameIsValid && emailIsValid && passwordIsValid) {
+    submitButton.disabled = false;
+  } else {
+    submitButton.disabled = true;
+  }
+}
+
+function togglePasswordVisibility(event) {
+  const toggleIcon = event.target;
+  const targetId = toggleIcon.getAttribute('toggle-target');
+  const targetInput = document.getElementById(targetId);
+  
+  if (targetInput.type === 'password') {
+    targetInput.type = 'text';
+    toggleIcon.classList.remove('fa-eye');
+    toggleIcon.classList.add('fa-eye-slash');
+  } else {
+    targetInput.type = 'password';
+    toggleIcon.classList.remove('fa-eye-slash');
+    toggleIcon.classList.add('fa-eye');
+  }
+}
+
+document.querySelectorAll('.toggle-password').forEach((toggleIcon) => {
+  toggleIcon.addEventListener('click', togglePasswordVisibility);
+});
+
+
+</script>
+
+  
+</body>
+</html>

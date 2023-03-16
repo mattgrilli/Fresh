@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%= snippet.title %></title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+  </head>
+  <body>
+    <h1><%= snippet.title %></h1>
+    <pre><%= snippet.content %></pre>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <script>
+      function copyToClipboard() {
+        var snippetContent = document.querySelector('pre').textContent;
+        navigator.clipboard.writeText(snippetContent);
+      }
+    </script>
+    <a href="/">Back to index</a>
+  </body>
+</html>

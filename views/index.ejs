@@ -3,6 +3,10 @@
   <head>
     <title>Snippets</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
   </head>
   <body>
     <header>
@@ -28,6 +32,30 @@
     
     <nav class="navbar">
       <a href="#" class="nav-link" onclick="toggleCreateForm()">+ Add Snippet</a>
+      <% if (!user) { %>
+        <a href="/login" class="nav-link">Login</a>
+      <% } else { %>
+        <% if (user.isAdmin) { %>
+          <a href="/admin/panel" class="nav-link">Admin Panel</a>
+        <% } %>
+        <div class="user-profile">
+          <img src="<%= user.profileImage %>" alt="Profile Image" width="150" height="150">
+          <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content">
+              <form action="/logout" method="get">
+                <button type="submit">Logout</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      
+
+      
+
+      
+      
 
       <div class="overlay" id="create-form-overlay">
         <div class="create-form">
@@ -63,6 +91,7 @@
                 <option value="go">Go</option>
                 <option value="kotlin">Kotlin</option>
                 <option value="rust">Rust</option>
+                <option value="text">text</option>
               </select>
               
               <label for="language">language:</label>
@@ -75,7 +104,7 @@
           </form>
         </div>
       </div>
-      
+     
       
       
       
@@ -173,6 +202,7 @@
                       <option value="go" <%= snippet.language === 'go' ? 'selected' : '' %>>Go</option>
                       <option value="kotlin" <%= snippet.language === 'kotlin' ? 'selected' : '' %>>Kotlin</option>
                       <option value="rust" <%= snippet.language === 'rust' ? 'selected' : '' %>>Rust</option>
+                      <option value="text" <%= snippet.language === 'text' ? 'selected' : '' %>>text</option>
                     </select>
                     <label for="language">language</label>
                   </div>
@@ -209,15 +239,42 @@
 const copyBtns = document.querySelectorAll('.copy-btn');
 
 function copyToClipboard(text, btn) {
-  navigator.clipboard.writeText(text);
-  btn.classList.add('copied');
-  btn.textContent = 'Copied';
-  setTimeout(() => {
-    btn.classList.remove('copied');
-    btn.textContent = 'Copy code';
-  }, 2000);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        btn.classList.add('copied');
+        btn.textContent = 'Copied';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.textContent = 'Copy code';
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error('Clipboard write failed:', error);
+      });
+  } else {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      const success = document.execCommand('copy');
+      if (success) {
+        btn.classList.add('copied');
+        btn.textContent = 'Copied';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.textContent = 'Copy code';
+        }, 2000);
+      } else {
+        console.error('Copy to clipboard using execCommand failed');
+      }
+    } catch (error) {
+      console.error('Copy to clipboard using execCommand failed:', error);
+    }
+    document.body.removeChild(textArea);
+  }
 }
-
 
 copyBtns.forEach((btn) => {
   const code = btn.parentElement.nextElementSibling.textContent;
@@ -225,6 +282,8 @@ copyBtns.forEach((btn) => {
     copyToClipboard(code, btn);
   });
 });
+
+
 
 
       function toggleCreateForm() {
@@ -244,6 +303,17 @@ copyBtns.forEach((btn) => {
         form.style.display = 'block';
       }
 
+      const tasksBtn = document.querySelector('.header-btn');
+
+tasksBtn.addEventListener('click', () => {
+  window.location.href = '/tasks';
+});
+
+
+function toggleUserOptions() {
+  const userOptions = document.getElementById('user-options');
+  userOptions.style.display = userOptions.style.display === 'none' ? 'block' : 'none';
+}
 
 
 

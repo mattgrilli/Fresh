@@ -249,6 +249,7 @@ h1 {
   padding: 10px;
   box-shadow: 0px 0px 5px #d9d9d9;
   margin-top: 1rem;
+  
 }
 
 .snippet-count-container h2 {
@@ -379,6 +380,17 @@ h1 {
   color: #67e5c1;
 }
 
+.header-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
 
 
 
@@ -388,7 +400,7 @@ h1 {
 
 .snippet-description {
   font-size: 1rem;
-  color: #6c757d;
+  color: #000000;
   margin: 0.5rem 0;
 }
 
