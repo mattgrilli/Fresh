@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>Entry</title>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <div class="container main-container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <h1 class="title"><%= entry.title %></h1>
+        
+  
+        <p><%= entry.entryContent %></p>
+  
+        <% if (entry.tags && entry.tags.length > 0) { %>
+          <div class="tags">
+            <% entry.tags.forEach(tag => { %>
+              <span class="tag"><%= tag %></span>
+            <% }) %>
+          </div>
+        <% } %>
+        <a href="/knowledge-base/<%= entry.knowledgeBase %>/entries/<%= entry._id %>/edit">Edit</a>
+
+        <form action="/knowledge-base/<%= entry.knowledgeBase %>/entries/<%= entry._id %>" method="post">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" class="button is-danger">Delete</button>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+  
+
+  <script>
+    async function saveChanges() {
+      const entryContent = document.getElementById('entryContent').innerText;
+      const response = await fetch('/knowledge-base/<%= entry.knowledgeBase %>/entries/<%= entry._id %>', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entryContent })
+      });
+
+      if (response.ok) {
+        alert('Changes saved successfully');
+      } else {
+        console.error('Error saving changes:', response.statusText);
+        alert('An error occurred while saving changes');
+      }
+    }
+
+    function confirmDelete() {
+  if (confirm("Are you sure you want to delete this entry?")) {
+    document.getElementById("deleteEntryForm").submit();
+  }
+}
+  </script>
+</body>
+</html>

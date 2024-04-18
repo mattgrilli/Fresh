@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
+const Image = require('./Image');
 
 const UserSchema = new Schema({
   email: {
@@ -30,8 +31,15 @@ const UserSchema = new Schema({
     default: Date.now,
   },
   profileImage: {
-    type: String,
-    default: 'https://i.imgur.com/Ug6Zhxz.png',
+    type: Schema.Types.ObjectId,
+    ref: 'Image',
+    default: function () {
+      return new Image({
+        filename: '/default.png',
+        contentType: 'image/png',
+        
+      });
+    },
   },
 });
 

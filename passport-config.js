@@ -5,6 +5,9 @@ const User = require('./models/User');
 module.exports = function(passport) {
   passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
+      // Convert the entered email to lowercase
+      email = email.toLowerCase();
+      
       const user = await User.findOne({ email });
       
       // Add console logs

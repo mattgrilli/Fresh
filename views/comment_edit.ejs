@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Edit Comment</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <h1>Edit Comment</h1>
+    <form action="/snippet/<%= snippet._id %>/comment/<%= comment._id %>/update" method="POST">
+      <textarea name="content" placeholder="Edit your comment..."><%= comment.content %></textarea>
+      <button type="submit">Update Comment</button>
+    </form>
+    <a href="/snippet/<%= snippet._id %>">Back to snippet</a>
+  </body>
+</html>

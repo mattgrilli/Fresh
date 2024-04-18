@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="bulma.css">
+    <link rel="stylesheet" type="text/css" href="forms.css">
+    <link rel="stylesheet" type="text/css" href="userprofile.css">
+    <link rel="stylesheet" type="text/css" href="search.css">
+    <title>KB</title>
+</head>
+<body>
+
+  <%- include('../partials/header') %>
+
+  <section class="kbsection">
+    <% if (knowledgeBases.length > 0) { %>
+      <ul>
+        <% knowledgeBases.forEach(knowledgeBase => { %>
+          <li>
+            <h2 class="subtitle">
+              <a href="/knowledge-base/<%= knowledgeBase._id %>"><%= knowledgeBase.name %></a>
+            </h2>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <div class="notification is-info">
+        No knowledge bases found. Create your first knowledge base!
+      </div>
+    <% } %>
+  </section>
+  
+    
+    <!-- Add form for creating a new knowledge base -->
+    <h3>Create a new knowledge base</h3>
+    <form action="/knowledge-base/create-knowledge-base" method="post">
+
+      <div class="field">
+        <label class="label" for="name">Name</label>
+        <div class="control">
+          <input class="input" type="text" name="knowledgeBaseName" id="knowledgeBaseName" placeholder="Enter knowledge base name" required>
+
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary" type="submit">Create Knowledge Base</button>
+        </div>
+      </div>
+    </form>
+    
+
+
+
+
+</body>
+</html>

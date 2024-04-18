@@ -1,0 +1,65 @@
+<div class="column is-8">
+    <div class="snippet-list-container">
+  
+      <% if (snippets.length === 0) { %>
+        <p>There are no snippets in the database.</p>
+        <button class="button" onclick="toggleCreateForm()">Create New Snippet</button>
+      <% } else { %>
+        <ul id="snippets-list">
+          <% snippets.forEach(function(snippet) { %>
+            <li>
+              <div class="box snippet" data-language="<%= snippet.language %>" data-created-at="<%= snippet.createdAt %>">
+                <div class="snippet-header">
+                  <h2 class="title is-4"><a href="/snippet/<%= snippet._id %>"><%= snippet.name %></a></h2>
+                </div>
+  
+                <div class="snippet-footer">
+                  <div class="snippet-author">
+                    <span>posted by: </span>
+                    <% if (snippet.owner) { %>
+                      <span class="username"><%= snippet.owner.username %></span>
+                      <span>last edited: <%= snippet.updatedAt.toLocaleString() %></span>
+                    <% } else { %>
+                      <span>posted by: Unknown</span>
+                      <span>last edited: Unknown</span>
+                    <% } %>
+                  </div>
+                </div>
+  
+                <label class="snippet-description-label" for="snippet-description">description:</label>
+                <div class="content">
+                  <p class="snippet-description"><%= snippet.description %></p>
+                </div>
+  
+                <label for="code-box"></label>
+                <div class="code-wrapper">
+                  <div class="box code-container">
+                    <div class="code-header">
+                      <span class="code-lang tag is-light"><%= snippet.language %></span>
+                      <button class="button is-small is-pulled-right copy-btn">Copy code</button>
+                    </div>
+                    <pre class="code-box"><%= snippet.code %></pre>
+                  </div>
+                </div>
+  
+                <div class="buttons">
+                  <button class="button is-small" onclick="toggleEditForm('<%- snippet._id %>')">Edit</button>
+                  <form action="/delete/<%= snippet._id %>" method="post" id="delete-form-<%= snippet._id %>">
+                    <button class="button is-small is-danger" type="submit" onclick="confirmDelete(event, 'delete-form-<%= snippet._id %>')">Delete</button>
+                  </form>
+                </div>
+  
+                <div class="snippet-comments">
+                  <a href="/snippet/<%= snippet._id %>">
+                    <span><%= snippet.commentCount %> <%= (snippet.commentCount === 1) ? 'comment' : 'comments' %></span>
+                  </a>
+                </div>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+  
+  

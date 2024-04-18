@@ -1,0 +1,45 @@
+<div class="snippet-list-container">
+    <% if (snippets.length === 0) { %>
+      <p>There are no snippets in the database.</p>
+      <button onclick="toggleCreateForm()">Create New Snippet</button>
+    <% } else { %>
+      <ul id="snippets-list">
+        <% snippets.forEach((snippet) => { %>
+          <li>
+            <div class="snippet-header">
+              <h2><%= snippet.name %></h2>
+            </div>
+  
+            <label class="snippet-description-label" for="snippet-description">description:</label>
+            <div id="form-group" class="form-group" rows="5">
+              <p class="snippet-description"><%= snippet.description %></p>
+            </div>
+  
+            <label for="code-box"></label>
+            <div class="code-wrapper">
+              <div class="code-container">
+                <div class="code-header">
+                  <span class="code-lang"><%= snippet.language %></span>
+                  <button class="copy-btn">Copy code</button>
+                </div>
+                <pre class="code-box"><%= snippet.code %></pre>
+              </div>
+            </div>
+  
+            <div class="button-container">
+              <button onclick="toggleEditForm('<%= snippet._id %>')">Edit</button>
+              <form style="display: inline-block" action="/delete/<%= snippet._id %>" method="post">
+                <button type="submit">Delete</button>
+              </form>
+            </div>
+  
+            <div class="snippet-footer">
+              <span>Created by: <%= snippet.owner ? snippet.owner.username : 'Unknown' %> </span>
+              <span>Last edited: <%= snippet.updatedAt ? snippet.updatedAt.toLocaleString() : 'Unknown' %> </span>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+  </div>
+  

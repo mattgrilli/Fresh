@@ -1,0 +1,39 @@
+<!-- knowledge-base/edit-entry.ejs -->
+<div class="container main-container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <h1 class="title">Edit Entry</h1>
+  
+        <form action="/knowledge-base/<%= kbId %>/entries/<%= entry._id %>" method="POST">
+          <input type="hidden" name="_method" value="PUT">
+          <div class="field">
+            <label class="label" for="title">Title</label>
+            <div class="control">
+              <input class="input" type="text" name="title" id="title" value="<%= entry.title %>" required>
+            </div>
+          </div>
+  
+          <div class="field">
+            <label class="label" for="entryContent">Content</label>
+            <div class="control">
+              <textarea class="textarea" name="entryContent" id="entryContent" rows="10" required><%= entry.entryContent %></textarea>
+            </div>
+          </div>
+  
+          <div class="field">
+            <label class="label" for="tags">Tags</label>
+            <div class="control">
+              <input class="input" type="text" name="tags" id="tags" value="<%= entry.tags.join(', ') %>">
+            </div>
+          </div>
+  
+          <div class="field">
+            <div class="control">
+              <button class="button is-link" type="submit">Update Entry</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

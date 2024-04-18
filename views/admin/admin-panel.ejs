@@ -1,45 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="/public/styles.css">
-  <script src="/public/search.js"></script>
-</head>
-<body>
-  <h1>Admin Panel</h1>
-  <p>Welcome, <%= user.username %></p>
-
-  <h2>Generate Invitation Code</h2>
-  <form id="generate-code-form" action="/admin/generate-code" method="POST">
-    <button type="submit">Generate Code</button>
-  </form>
-
-  <div id="generated-code">
-    <!-- Display the generated code here -->
-  </div>
-
-  <script>
-    // Prevent form submission and use AJAX instead
-    document.getElementById('generate-code-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const response = await fetch('/admin/generate-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        document.getElementById('generated-code').innerText = `Generated Code: ${data.code}`;
-      } else {
-        alert('Failed to generate code. Please try again.');
-      }
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/admin.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
+<link rel="manifest" href="/public/site.webmanifest">
+  </head>
+  <body>
+    <header>
+      <h1>Admin Panel</h1>
+    </header>
+    <div class="sidebar">
+        <div class="sidebar-header">
+          <img src="/avatar.png" alt="Logo">
+        </div>
+        <ul class="sidebar-nav">
+          <li class="active-page">
+            <a href="#">Dashboard</a>
+          </li>
+          <li>
+            <a href="/admin/usermgmt">User Management</a>
+          </li>
+          <li>
+            <a href="#">Team Management</a>
+          </li>
+          <li>
+            <a href="#">Snippet Management</a>
+          </li>
+          <li>
+            <a href="#">Audit Log</a>
+          </li>
+        </ul>
+      </div>
+      
+    <main>
+        <section id="user-management">
+            <h2>User Management</h2>
+            <div class="card-container">
+              <div class="card">
+                <h3>Total Users</h3>
+                <p>1000</p>
+              </div>
+              <div class="card">
+                <h3>Active Users</h3>
+                <p>800</p>
+              </div>
+              <div class="card">
+                <h3>Inactive Users</h3>
+                <p>200</p>
+              </div>
+              <div class="card">
+                <h3>Blocked Users</h3>
+                <p>10</p>
+              </div>
+              <div class="card">
+                <h3>New Users (last 7 days)</h3>
+                <p>50</p>
+              </div>
+            </div>
+          </section>
+          
+          <section id="team-management">
+            <h2>Team Management</h2>
+            <div class="card-container">
+              <div class="card">
+                <h3>Total Teams</h3>
+                <p>50</p>
+              </div>
+              <div class="card">
+                <h3>Active Teams</h3>
+                <p>45</p>
+              </div>
+              <div class="card">
+                <h3>Inactive Teams</h3>
+                <p>5</p>
+              </div>
+              <div class="card">
+                <h3>New Teams (last 7 days)</h3>
+                <p>10</p>
+              </div>
+              <div class="card">
+                <h3>Teams with Pending Invites</h3>
+                <p>2</p>
+              </div>
+            </div>
+          </section>
+          
+          <section id="snippet-management">
+            <h2>Snippet Management</h2>
+            <div class="card-container">
+              <div class="card">
+                <h3>Total Snippets</h3>
+                <p>5000</p>
+              </div>
+              <div class="card">
+                <h3>Public Snippets</h3>
+                <p>3000</p>
+              </div>
+              <div class="card">
+                <h3>Private Snippets</h3>
+                <p>1500</p>
+              </div>
+              <div class="card">
+                <h3>Team Snippets</h3>
+                <p>500</p>
+              </div>
+            </div>
+          </section>
+          <section id="audit-log">
+            <h2>Audit Log</h2>
+            <div class="card-container">
+              <div class="card">
+                <h3>Total Events</h3>
+                <p>5000</p>
+              </div>
+              <div class="card">
+                <h3>Recent Events</h3>
+                <p>10</p>
+              </div>
+              <div class="card">
+                <h3>Failed Login Attempts</h3>
+                <p>100</p>
+              </div>
+              <div class="card">
+                <h3>Successful Logins</h3>
+                <p>50</p>
+              </div>
+              <div class="card">
+                <h3>Actions Taken by Admins</h3>
+                <p>2000</p>
+              </div>
+            </div>
+          </section>
+          
+          
+    </main>
+  </body>
 </html>

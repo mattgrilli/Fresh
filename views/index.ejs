@@ -2,129 +2,141 @@
 <html>
   <head>
     <title>Snippets</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+
+    <link rel="stylesheet" type="text/css" href="bulma.css">
+    <link rel="stylesheet" type="text/css" href="forms.css">
+    <link rel="stylesheet" type="text/css" href="userprofile.css">
+    <link rel="stylesheet" type="text/css" href="search.css">
+    
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+
+
   </head>
   <body>
-    <header>
-      <h1>Snippets</h1>
-      <div class="search-container">
-        <div class="search-wrapper">
-          <input type="text" id="search-input" placeholder="Search...">
-          <div class="search-clear-button">&#x2715;</div>
-          <div class="search-results-overlay">
-            <div class="search-results-container">
-              <ul id="search-results-list"></ul>
-              <div class="search-results-count"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      
-      
-      
-      
-    </header>
+    <%- include('partials/header') %>
+
     
-    <nav class="navbar">
-      <a href="#" class="nav-link" onclick="toggleCreateForm()">+ Add Snippet</a>
-      <% if (!user) { %>
-        <a href="/login" class="nav-link">Login</a>
-      <% } else { %>
-        <% if (user.isAdmin) { %>
-          <a href="/admin/panel" class="nav-link">Admin Panel</a>
-        <% } %>
-        <div class="user-profile">
-          <img src="<%= user.profileImage %>" alt="Profile Image" width="150" height="150">
-          <div class="dropdown">
-            <button class="dropbtn">Options</button>
-            <div class="dropdown-content">
-              <form action="/logout" method="get">
-                <button type="submit">Logout</button>
-              </form>
+    
+      
+    <div class="overlay" id="create-form-overlay">
+      <div class="create-form">
+        <button type="button" class="delete is-large" onclick="toggleCreateForm()"></button>
+        <h2 class="title is-4">Create Snippet</h2>
+        <form action="/create" method="POST">
+          <div class="field">
+            <label class="label" for="name">Name:</label>
+            <div class="control">
+              <input class="input" type="text" id="name" name="name" required>
             </div>
           </div>
-        </div>
-      <% } %>
-      
-
-      
-
-      
-      
-
-      <div class="overlay" id="create-form-overlay">
-        <div class="create-form">
-          <button type="button" class="close-btn" onclick="toggleCreateForm()">X</button>
-          <h2>Create Snippet</h2>
-          <form action="/create" method="POST">
-            <div class="form-group">
-              <input type="text" id="name" name="name" required>
-              <label for="name">name:</label>
+          <div class="field">
+            <label class="label" for="description">Description:</label>
+            <div class="control">
+              <textarea class="textarea" id="description" name="description" rows="3" required></textarea>
             </div>
-            <div class="form-group">
-              <textarea id="description" name="description" rows="3" required></textarea>
-              <label for="description">Description:</label>
+          </div>
+          <div class="field">
+            <label class="label" for="language">Language:</label>
+            <div class="control">
+              <div class="select">
+                <select id="language" name="language" required>
+                  <option value="">Select a language</option>
+                  <% languages.forEach(function(language) { %>
+                    <option value="<%= language %>"><%= language %></option>
+                  <% }); %>
+                </select>
+              </div>
             </div>
-            <div class="form-group">
-              <select id="language" name="language" required>
-                <option value="">Select a language</option>
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="ruby">Ruby</option>
-                <option value="typescript">TypeScript</option>
-                <option value="command prompt">Command Prompt</option>
-                <option value="powershell">PowerShell</option>
-                <option value="bash">Bash</option>
-                <option value="html">HTML</option>
-                <option value="css">CSS</option>
-                <option value="sql">SQL</option>
-                <option value="php">PHP</option>
-                <option value="java">Java</option>
-                <option value="c++">C++</option>
-                <option value="c#">C#</option>
-                <option value="swift">Swift</option>
-                <option value="go">Go</option>
-                <option value="kotlin">Kotlin</option>
-                <option value="rust">Rust</option>
-                <option value="text">text</option>
-              </select>
+          </div>
+          <div class="field">
+            <label class="label" for="code">Code:</label>
+            <div class="control">
+              <textarea class="textarea" id="code" name="code" rows="10" required></textarea>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <button class="button is-primary" type="submit">Create</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+
+    
+
+  
+    
+    
+         
+         
+         
+         
+         
+         
+         
+          <div class="column is-8">
+
+
+
+            
+            <div class="snippet-list-container">
+
+              <div class="container">
+                <div class="columns">
+                  <div class="column is-4">
+                    <div class="buttons">
+                      <button class="button is-primary" onclick="toggleCreateForm()">
+                        <span class="icon">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span>+ Add Snippet</span>
+                      </button>
               
-              <label for="language">language:</label>
-            </div>
-            <div class="form-group">
-              <textarea id="code" name="code" rows="10" required></textarea>
-              <label for="code">code:</label>
-            </div>
-            <button type="submit">create</button>
-          </form>
-        </div>
-      </div>
-     
+                      <div class="dropdown" id="snippet-counts-dropdown">
+                        <div class="dropdown-trigger">
+                          <button class="button hamburger-button" aria-haspopup="true" aria-controls="snippet-counts-menu" onclick="toggleSnippetCountsDropdown()">
+                            <span class="icon">
+                              <i class="fas fa-bars"></i>
+                            </span>
+                            <span>Snippet Counts</span>
+                          </button>
+                        </div>
+                        <div class="dropdown-menu" id="snippet-counts-menu" role="menu">
+                          <div class="dropdown-content">
+                            <% for (let lang in snippetCounts) { %>
+                              <a class="dropdown-item"><%= lang %>: <%= snippetCounts[lang] %></a>
+                            <% } %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
       
-      
-      
-      
-    </nav>
-
-    <div class="container">
-      <div class="snippet-count-container">
-        <h2>Snippet Counts</h2>
-        <ul>
-          <% for (let lang in snippetCounts) { %>
-            <li><%= lang %>: <%= snippetCounts[lang] %></li>
-          <% } %>
-        </ul>
-      </div>
-    
-    <div class="snippet-list-container">
       <!-- Your existing content here -->
     
- 
+
+      
+      
+      
+
+      
+      
+      
+      
     
     <% if (snippets.length === 0) { %>
       <p>There are no snippets in the database.</p>
@@ -133,11 +145,25 @@
       <ul id="snippets-list">
         <% snippets.forEach((snippet) => { %>
           <li>
+            <div class="snippet" data-language="<%= snippet.language %>" data-created-at="<%= snippet.createdAt %>">
             <div class="snippet-header">
               
-              <h2><%= snippet.name %></h2>
+              <h2><a href="/snippet/<%= snippet._id %>"><%= snippet.name %></a></h2>
               
             </div>
+
+            <div class="snippet-footer">
+              <div class="snippet-author">
+                <span>posted by: </span>
+                <% if (snippet.owner) { %>
+                  <span class="username"><%= snippet.owner.username %></span>
+                  <span>last edited: <%= snippet.updatedAt.toLocaleString() %></span>
+                <% } else { %>
+                  <span>posted by: Unknown</span>
+                  <span>last edited: Unknown</span>
+                <% } %>
+              </div>
+              </div>
 
             <label class="snippet-description-label" for="snippet-description">description:</label>
             <div id="form-group" class="form-group" rows="5">
@@ -154,18 +180,35 @@
                 <pre class="code-box"><%= snippet.code %></pre>
               </div>
             </div>
+     
             
             
             
 
-            
             <div class="button-container">
-              <button onclick="toggleEditForm('<%= snippet._id %>')">Edit</button>
-              <form style="display: inline-block" action="/delete/<%= snippet._id %>" method="post">
-                <button type="submit">Delete</button>
-              </form>
+              <% if (user && (snippet.owner._id.toString() === user._id.toString() || user.isAdmin)) { %>
+                <button onclick="toggleEditForm('<%- snippet._id %>')">Edit</button>
+            
+                <form action="/delete/<%= snippet._id %>" method="post" id="delete-form-<%= snippet._id %>">
+                  <button type="submit" onclick="confirmDelete(event, 'delete-form-<%= snippet._id %>')">Delete</button>
+                </form>
+              <% } %>
             </div>
+            
+            
 
+            <div class="snippet-comments">
+              <a href="/snippet/<%= snippet._id %>">
+                <span><%= snippet.commentCount %> <%= (snippet.commentCount === 1) ? 'comment' : 'comments' %></span>
+              </a>
+            </div>
+            
+            
+            
+            
+            
+            
+            
             
             <div class="overlay" id="overlay-<%= snippet._id %>">
               <div class="edit-form" id="edit-form-<%= snippet._id %>">
@@ -215,6 +258,7 @@
                 
               </div>
             </div>
+            </div>
           </li>
         <% }) %>
       </ul>
@@ -224,100 +268,52 @@
   </div>
   </div>
   
+  <script>
+const languages = [
+  'JavaScript',
+  'Python',
+  'Ruby',
+  'TypeScript',
+  'Command Prompt',
+  'PowerShell',
+  'Bash',
+  'HTML',
+  'CSS',
+  'SQL',
+  'PHP',
+  'Java',
+  'C++',
+  'C#',
+  'Swift',
+  'Go',
+  'Kotlin',
+  'Rust',
+  'text'
+];
 
-  
-
-  
-
-    <script>
-
-
-
-
-
-
-const copyBtns = document.querySelectorAll('.copy-btn');
-
-function copyToClipboard(text, btn) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        btn.classList.add('copied');
-        btn.textContent = 'Copied';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.textContent = 'Copy code';
-        }, 2000);
-      })
-      .catch((error) => {
-        console.error('Clipboard write failed:', error);
+    document.addEventListener('DOMContentLoaded', () => {
+      const navbarBurger = document.querySelector('.navbar-burger');
+      navbarBurger.addEventListener('click', () => {
+        const target = navbarBurger.dataset.target;
+        const menu = document.getElementById(target);
+        navbarBurger.classList.toggle('is-active');
+        menu.classList.toggle('is-active');
       });
-  } else {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    try {
-      const success = document.execCommand('copy');
-      if (success) {
-        btn.classList.add('copied');
-        btn.textContent = 'Copied';
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.textContent = 'Copy code';
-        }, 2000);
-      } else {
-        console.error('Copy to clipboard using execCommand failed');
-      }
-    } catch (error) {
-      console.error('Copy to clipboard using execCommand failed:', error);
-    }
-    document.body.removeChild(textArea);
-  }
+    });
+
+
+    function toggleSnippetCountsDropdown() {
+  const dropdown = document.getElementById("snippet-counts-dropdown");
+  dropdown.classList.toggle("is-active");
 }
 
-copyBtns.forEach((btn) => {
-  const code = btn.parentElement.nextElementSibling.textContent;
-  btn.addEventListener('click', () => {
-    copyToClipboard(code, btn);
-  });
-});
+  </script>
+  
+  
 
+  
 
-
-
-      function toggleCreateForm() {
-  const createForm = document.getElementById('create-form-overlay');
-  if (createForm.style.display === 'none' || !createForm.style.display) {
-    createForm.style.display = 'block';
-  } else {
-    createForm.style.display = 'none';
-  }
-}
-
-
-      function toggleEditForm(id) {
-        const overlay = document.getElementById(`overlay-${id}`);
-        overlay.classList.toggle('show');
-        const form = document.getElementById(`edit-form-${id}`);
-        form.style.display = 'block';
-      }
-
-      const tasksBtn = document.querySelector('.header-btn');
-
-tasksBtn.addEventListener('click', () => {
-  window.location.href = '/tasks';
-});
-
-
-function toggleUserOptions() {
-  const userOptions = document.getElementById('user-options');
-  userOptions.style.display = userOptions.style.display === 'none' ? 'block' : 'none';
-}
-
-
-
-    </script>
+    <script src="index.js"></script>
     <script src="search.js"></script>
     
   </body>

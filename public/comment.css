@@ -1,0 +1,266 @@
+/* General settings */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #181818;
+  color: #d9d9d9;
+  line-height: 1.5;
+}
+
+a {
+  color: #2ad2c9;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #4de5da;
+}
+
+/* Snippet container */
+.snippet-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #1c1c1c;
+  border-radius: 4px;
+}
+
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.snippet-footer {
+  margin-top: 20px;
+}
+
+.snippet-author {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.snippet-description-label {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 4px;
+}
+
+.snippet-description {
+  white-space: pre-wrap;
+}
+
+.code-container {
+  background-color: #282828;
+  border-radius: 4px;
+  padding: 16px;
+  position: relative;
+}
+
+.code-wrapper {
+  margin-top: 20px;
+}
+
+.code-container {
+  background-color: #282828;
+  border-radius: 4px;
+  padding: 16px;
+  position: relative;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.code-lang {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.copy-btn {
+  padding: 4px 8px;
+  background-color: #2ad2c9;
+  color: #fff;
+  font-size: 0.8em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background-color: #4de5da;
+}
+
+.code-box {
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Comments container */
+.comments-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #1c1c1c;
+  border-radius: 4px;
+}
+
+.comment-container {
+  padding: 1rem;
+  border-left: 3px solid #2ad2c9;
+  margin-bottom: 10px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #888;
+  text-decoration: underline;
+}
+
+.snippet-profile-image {
+  margin-right: 8px;
+}
+
+.comment-content {
+  margin-top: 5px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.comment-actions form {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.comment-action-link {
+  display: inline-block;
+  text-decoration: none;
+  color: #2ad2c9;
+}
+
+.comment-action-link:hover {
+  text-decoration: underline;
+  color: #4de5da;
+}
+
+.comment-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+textarea {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #2ad2c9;
+  background-color: #282828;
+  color: #d9d9d9;
+  resize: vertical;
+}
+
+button[type="submit"] {
+  background-color: #2ad2c9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #4de5da;
+}
+
+/* Default profile image */
+.profile-image {
+  border-radius: 50%;
+}
+
+.comment-form-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #1c1c1c;
+  border-radius: 4px;
+}
+
+/* Comment form container elements */
+.comment-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-form-container textarea {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #2ad2c9;
+  background-color: #282828;
+  color: #d9d9d9;
+  resize: vertical;
+}
+
+.comment-form-container button[type="submit"] {
+  background-color: #2ad2c9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.comment-form-container button[type="submit"]:hover {
+  background-color: #4de5da;
+}
+
+.comment-form-container a {
+  color: #4de5da;
+  text-decoration: none;
+}
+
+.comment-form-container a:hover {
+  color: #2ad2c9;
+}
+
+/* Default profile image */
+.profile-image {
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.timeelapsed {
+  margin-left: 5px;
+}
+.username {
+  margin: 5px, 5px, 0, 0;
+}
+
+.comment-username {
+  padding-left: 10px;
+  text-decoration: none;
+}
+.comment-username:hover {
+  padding-left: 10px;
+  text-decoration: none;
+  color: #4de5da;
+}

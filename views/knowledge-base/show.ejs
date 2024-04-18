@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  
+    <title>KB</title>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <div class="container main-container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <h1 class="title"><%= knowledgeBase.name %></h1>
+  
+        <% if (entries.length > 0) { %>
+          <table class="table is-fullwidth">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Tags</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% entries.forEach(entry => { %>
+                <tr>
+                  <td>
+                    <a href="/knowledge-base/<%= knowledgeBase._id %>/entries/<%= entry._id %>">
+                      <%= entry.title %>
+                    </a>
+                  </td>
+                  <td>
+                    <% if (entry.tags && entry.tags.length > 0) { %>
+                      <div class="tags">
+                        <% entry.tags.forEach(tag => { %>
+                          <span class="tag"><%= tag %></span>
+                        <% }) %>
+                      </div>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="notification is-info">
+            No entries found in this knowledge base.
+          </div>
+        <% } %>
+  
+      </div>
+    </div>
+  </div>
+  
+
+  
+<form action="/knowledge-base/<%= knowledgeBase._id %>/entries" method="post" id="entryForm">
+  <div class="field">
+      <label class="label" for="title">Title:</label>
+      <div class="control">
+          <input class="input" type="text" name="title" id="title" required />
+      </div>
+  </div>
+  <div class="field">
+      <label class="label" for="entryContent">Content:</label>
+      <div class="control">
+          <textarea id="entryContent" name="entryContent" required></textarea>
+      </div>
+  </div>
+  <div class="field">
+      <label class="label" for="tags">Tags (comma-separated):</label>
+      <div class="control">
+          <input class="input" type="text" name="tags" id="tags" />
+      </div>
+  </div>
+  <div class="field">
+      <div class="control">
+          <button class="button is-primary" type="submit" id="createEntryButton">Create Entry</button>
+      </div>
+  </div>
+</form>
+
+
+
+</body>
+</html>

@@ -1,20 +1,99 @@
 <!doctype html>
 <html>
   <head>
-    <title><%= snippet.title %></title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-
+    <title><%= snippet.name %></title>
+    
+    <link rel="stylesheet" type="text/css" href="/bulma.css">
+    <link rel="stylesheet" type="text/css" href="/search.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   </head>
   <body>
-    <h1><%= snippet.title %></h1>
-    <pre><%= snippet.content %></pre>
-    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <%- include('partials/header') %>
+    <section class="section">
+      <div class="container">
+        <div class="snippet-container">
+          <div class="snippet-header">
+            <h2 class="title is-3"><%= snippet.name %></h2>
+            <a class="button is-light" href="/">Back to Home</a>
+          </div>
+          <div class="snippet-footer">
+            <div class="snippet-author">
+              <span>Posted by: </span>
+              <% if (snippet.owner) { %>
+                <span class="username"><%= snippet.owner.username %></span>
+                <span>Last edited: <%= snippet.updatedAt.toLocaleString() %></span>
+              <% } else { %>
+                <span>Posted by: Unknown</span>
+                <span>Last edited: Unknown</span>
+              <% } %>
+            </div>
+          </div>
+          <label class="label" for="snippet-description">Description:</label>
+          <div class="content">
+            <p class="snippet-description"><%= snippet.description %></p>
+          </div>
+          <label class="label" for="code-box">Code:</label>
+          <div class="code-wrapper">
+            <div class="code-container box">
+              <div class="code-header has-background-light">
+                <span class="code-lang tag is-primary"><%= snippet.language %></span>
+                <button class="button is-small is-light copy-btn" onclick="copyToClipboard()">Copy code</button>
+              </div>
+              <pre class="code-box"><%= snippet.code %></pre>
+            </div>
+          </div>
+        </div>
+        <div class="comments-container">
+          <h3 class="title is-4">Comments:</h3>
+          <% comments.forEach(function(comment) { %>
+            <div class="comment-container box">
+              <div class="comment-header">
+                <span>Posted by</span>
+                <strong class="comment-username"><%= comment.author.username %></strong>
+                <span class="timeelapsed"><%= timeElapsed(comment.createdAt) %></span>
+              </div>
+              <div class="comment-content content">
+                <p><%= comment.content %></p>
+              </div>
+              <% if (isAuthenticated && (isAdmin || currentUser._id.toString() === comment.author._id.toString())) { %>
+                <div class="comment-actions">
+                  <a href="/snippet/<%= snippet._id %>/comment/<%= comment._id %>/edit" class="button is-small is-light">Edit</a>
+                  <form action="/snippet/<%= snippet._id %>/comment/<%= comment._id %>/delete" method="POST" style="display:inline;">
+                    <button type="submit" class="button is-small is-danger">Delete</button>
+                  </form>
+                </div>
+              <% } %>
+            </div>
+            <% }); %>
+        </div>
+        <div class="comment-form-container">
+          <% if (isAuthenticated) { %>
+            <form action="/snippet/<%= snippet._id %>/comment" method="POST">
+              <input type="hidden" name="snippet" value="<%= snippet._id %>">
+              <div class="field">
+                <label class="label">Add a comment:</label>
+                <div class="control">
+                  <textarea class="textarea" name="content" placeholder="Write a comment..."></textarea>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button is-primary">Post Comment</button>
+                </div>
+              </div>
+            </form>
+          <% } else { %>
+            <p>Please <a href="/login">log in</a> to post a comment.</p>
+          <% } %>
+        </div>
+      </div>
+    </section>
     <script>
       function copyToClipboard() {
         var snippetContent = document.querySelector('pre').textContent;
         navigator.clipboard.writeText(snippetContent);
       }
     </script>
-    <a href="/">Back to index</a>
   </body>
 </html>
+
